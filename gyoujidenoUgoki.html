@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行事での動き | 電装班引き継ぎ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: "HakkouMincho";
+    src: url("HakkouMincho.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  :root{
+    --bg: #DDE8F6;
+    --bar-bg: #F5D7D6;
+    --ink: #9F8F82;
+    --bar-h: 80px;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family: "DotGothic16", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    overflow-x: auto;
+  }
+
+  /* ---- 上下のピンク帯（流れる文字） ---- */
+  .marquee-bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: var(--bar-h);
+    background: var(--bar-bg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+  .marquee-bar.top{ top: 0; }
+  .marquee-bar.bottom{ bottom: 0; }
+
+  .marquee-track{
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .marquee-track span{
+    font-family: "DotGothic16", sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    font-synthesis: none;
+    -webkit-text-stroke: 0.03px var(--ink);
+    padding: 0 28px;
+    color: var(--ink);
+  }
+
+  .marquee-track.to-left{
+    animation: scroll-left 32s linear infinite;
+  }
+  .marquee-track.to-right{
+    animation: scroll-right 32s linear infinite;
+  }
+
+  @keyframes scroll-left{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @keyframes scroll-right{
+    from{ transform: translateX(-50%); }
+    to{ transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{ animation: none !important; }
+  }
+
+  /* ---- コンテンツ ---- */
+  .content{
+    min-height: 100vh;
+    padding: calc(var(--bar-h) + 32px) 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-link{
+    text-decoration: none;
+    color: var(--ink);
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid var(--ink);
+    border-radius: 20px;
+    white-space: nowrap;
+    transition: transform 0.15s ease;
+  }
+  .back-link:hover{
+    transform: translateX(-4px);
+  }
+
+  .page-header{
+    width: 100%;
+    max-width: min(90vw, 760px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .header-spacer{
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  .page-title{
+    flex: 1;
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  h1{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .section-heading{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 700;
+    margin-top: 56px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .sub-heading{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(18px, 1.6vw, 22px);
+    font-weight: 700;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .body-text{
+    width: 760px;
+    max-width: 760px;
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    line-height: 1.9;
+    text-align: center;
+  }
+
+  .body-text a{
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .body-list{
+    width: 100%;
+    max-width: min(80vw, 520px);
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    line-height: 2;
+    list-style: none;
+    text-align: center;
+    margin: 0 auto 0;
+  }
+
+  .diagram-block{
+    width: 100%;
+    max-width: min(90vw, 820px);
+    margin: 24px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .diagram-block img{
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  .diagram-caption{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(14px, 1.2vw, 17px);
+    margin-top: 8px;
+    color: var(--ink);
+  }
+
+  .body-block-download{
+    width: 100%;
+    max-width: min(90vw, 760px);
+    margin: 16px auto 0;
+    display: flex;
+    justify-content: center;
+  }
+  .download-card{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--bar-bg);
+    border-radius: 10px;
+    padding: 14px 20px;
+    transition: transform 0.15s ease;
+  }
+  .download-card:hover{
+    transform: translateY(-2px);
+  }
+  .download-icon{
+    font-size: 22px;
+    line-height: 1;
+  }
+  .download-text{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+  }
+  .download-title{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 700;
+  }
+  .download-sub{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(12px, 1vw, 14px);
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+
+  <div class="marquee-bar top">
+    <div class="marquee-track to-left">
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+    </div>
+  </div>
+
+  <div class="marquee-bar bottom">
+    <div class="marquee-track to-right">
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="page-header">
+      <a href="index.html" class="back-link">← メニューに戻る</a>
+      <p class="page-title">行事での動き</p>
+      <span class="header-spacer" aria-hidden="true"></span>
+    </div>
+    <h2 class="section-heading" style="margin-top: 24px;">1　秋TF</h2>
+    <div class="body-text">
+      やるのか分からないのですが42代の時は11月くらいにやりました。<br>
+      自分の前の代が鳥コンに出ていたら、全部作り直しなのでたぶん操舵系統の完成を目指したら良いと思います。<br>
+      自分の前の代が鳥コンに出ていないなら、そのまま一旦電装引き継いで使用したら良いと思います。<br>
+      自分で使いこなせるようになる練習にしましょう♡
+    </div>
+
+    <h2 class="section-heading">2　回転試験</h2>
+    <div class="body-text">
+      プロペラを初めて取り付けて回す試験です。ここで初めてプロペラ回転数計を<br>
+      取り付けて計測します。パイロットのペダル回転数とプロペラ回転数を合わせて<br>
+      確認するので試験中に自分の携帯やパソコンで回転数を見られるようにしたら良いかもです。
+    </div>
+
+    <h2 class="section-heading">3　全組試験</h2>
+    <div class="body-text">
+      機体を完全に組み立てて重心測定や尾翼動作確認を行います。重心測定のために載せる<br>
+      電装品全ての重量を量ります。あと載せる場所も桁とかに印をつけても良いと思います。<br>
+      そのあと全て載せて、全てのケーブルも巻いて重心測定を行います。<br>
+      私は重心測定の時にサーボを入れ忘れたり、ケーブルつけっぱなしにしたりしたので気をつけてください！
+    </div>
+
+    <h2 class="section-heading">4　TF</h2>
+    <div class="body-text">
+      電装班の力の見せ所TFです♡<br>
+      たぶん初めの方のTFは機体組み立てとかに時間がかかってみんな起きているけど途中から<br>
+      手際が良くなってみんな交代で寝ようみたいになりますが、電装班は起きます。寝ません。<br>
+      42代の時は、<br>
+      0時ごろに滑空場に着いて翼とフレームがトラックから出されたらトラックに電装品を入れてサーボの動作確認を<br>
+      行っていました。もう1人電装班がいたら計測モジュールたちの動作確認をしてもらえるとスムーズに進みます。<br>
+      2時ごろに重心測定するなら始まるのでケーブルを全て巻きます。そこからTFが始まるまでPCを充電したり、<br>
+      電装スマホを確認して、それでも時間が余ったらケーブルの導通確認や修復、作成をしていました。<br>
+      3時くらいに尾翼にサーボをつけます。そこから尾翼動作確認を行います。ホーン取り付けしないで行い、<br>
+      そのあとホーンを取り付けて動かし、そのあと操舵マイコンとリポ電池を固定します。<br>
+      そこからラダー、エレベーターのニュートラルを変えたりします。<br>
+      TFが始まったら、途中でニュートラルを変える可能性もあるので基本スターターの位置にいました。<br>
+      あと不安だったので計測マイコンから私の持つスマホにデータを飛ばしてどれかの計測モジュールが<br>
+      動かなくなっていたらすぐに確認できるようにしていました。<br>
+      持ち物リスト載せておきます。基本TFはドかでかバッグと小さめキャリーケースで行ってました。
+    </div>
+    <div class="body-block-download">
+      <a href="https://docs.google.com/document/d/1-D6PvkKTqK_2qG--zPUGrsFLXqzi7R1sCeT15z5TrlM/edit?usp=drivesdk" target="_blank" rel="noopener" class="download-card">
+        <span class="download-icon">🔗</span>
+        <span class="download-text">
+          <span class="download-title">持ち物リスト</span>
+          <span class="download-sub">Googleドキュメントを開く</span>
+        </span>
+      </a>
+    </div>
+    <div class="body-text" style="margin-top: 12px;">
+      わたしの心残りはフェア班に蔑ろにされて何度も電装が落ちてしまったことです。<br>
+      ちゃんと囲いを作ってもらわないと落ちちゃうのにデータとか取れていないと電装のせいにされるので<br>
+      フェア班にはしつこく言うべきでした。ぜひ言ってね。フェア設計と相談しても良いと思います。
+    </div>
+
+  </div>
+
+</body>
+</html>

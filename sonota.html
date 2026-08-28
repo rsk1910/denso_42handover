@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>その他 | 電装班引き継ぎ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: "HakkouMincho";
+    src: url("HakkouMincho.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  :root{
+    --bg: #DDE8F6;
+    --bar-bg: #F5D7D6;
+    --ink: #9F8F82;
+    --bar-h: 80px;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family: "DotGothic16", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    overflow-x: auto;
+  }
+
+  /* ---- 上下のピンク帯（流れる文字） ---- */
+  .marquee-bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: var(--bar-h);
+    background: var(--bar-bg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+  .marquee-bar.top{ top: 0; }
+  .marquee-bar.bottom{ bottom: 0; }
+
+  .marquee-track{
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .marquee-track span{
+    font-family: "DotGothic16", sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    font-synthesis: none;
+    -webkit-text-stroke: 0.03px var(--ink);
+    padding: 0 28px;
+    color: var(--ink);
+  }
+
+  .marquee-track.to-left{
+    animation: scroll-left 32s linear infinite;
+  }
+  .marquee-track.to-right{
+    animation: scroll-right 32s linear infinite;
+  }
+
+  @keyframes scroll-left{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @keyframes scroll-right{
+    from{ transform: translateX(-50%); }
+    to{ transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{ animation: none !important; }
+  }
+
+  /* ---- コンテンツ ---- */
+  .content{
+    min-height: 100vh;
+    padding: calc(var(--bar-h) + 32px) 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-link{
+    text-decoration: none;
+    color: var(--ink);
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid var(--ink);
+    border-radius: 20px;
+    white-space: nowrap;
+    transition: transform 0.15s ease;
+  }
+  .back-link:hover{
+    transform: translateX(-4px);
+  }
+
+  .page-header{
+    width: 100%;
+    max-width: min(90vw, 760px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .header-spacer{
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  .page-title{
+    flex: 1;
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  h1{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .section-heading{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 700;
+    margin-top: 56px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .sub-heading{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(18px, 1.6vw, 22px);
+    font-weight: 700;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .body-text{
+    width: 760px;
+    max-width: 760px;
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    line-height: 1.9;
+    text-align: center;
+  }
+
+  .body-text a{
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .body-list{
+    width: 100%;
+    max-width: min(80vw, 520px);
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    line-height: 2;
+    list-style: none;
+    text-align: center;
+    margin: 0 auto 0;
+  }
+
+  .diagram-block{
+    width: 100%;
+    max-width: min(90vw, 820px);
+    margin: 24px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .diagram-block img{
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  .diagram-caption{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(14px, 1.2vw, 17px);
+    margin-top: 8px;
+    color: var(--ink);
+  }
+
+  .body-block-download{
+    width: 100%;
+    max-width: min(90vw, 760px);
+    margin: 16px auto 0;
+    display: flex;
+    justify-content: center;
+  }
+  .download-card{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--bar-bg);
+    border-radius: 10px;
+    padding: 14px 20px;
+    transition: transform 0.15s ease;
+  }
+  .download-card:hover{
+    transform: translateY(-2px);
+  }
+  .download-icon{
+    font-size: 22px;
+    line-height: 1;
+  }
+  .download-text{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+  }
+  .download-title{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 700;
+  }
+  .download-sub{
+    font-family: "HakkouMincho", serif;
+    font-size: clamp(12px, 1vw, 14px);
+    opacity: 0.8;
+  }
+
+  /* ---- サーボ診断フロー ---- */
+  .troubleshoot{
+    width: 100%;
+    max-width: min(90vw, 600px);
+    margin: 24px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .troubleshoot-question{
+    font-family: "HakkouMincho", serif;
+    font-size: 25px;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .troubleshoot-box{
+    width: 100%;
+    min-height: 330px;
+    border: 1.5px solid var(--ink);
+    border-radius: 10px;
+    background: transparent;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .troubleshoot-intro{
+    font-family: "HakkouMincho", serif;
+    font-size: 19px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .troubleshoot-options{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .troubleshoot-btn{
+    font-family: "HakkouMincho", serif;
+    font-size: 16px;
+    padding: 10px 26px;
+    border: 1.5px solid var(--ink);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .troubleshoot-btn:hover{
+    transform: translateY(-2px);
+    background: var(--bar-bg);
+  }
+  .troubleshoot-answer{
+    width: 100%;
+    background: transparent;
+    font-family: "HakkouMincho", serif;
+    font-size: 25px;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .troubleshoot-link{
+    font-family: "HakkouMincho", serif;
+    font-size: 25px;
+    color: var(--ink);
+    text-decoration: underline;
+  }
+  .troubleshoot-path{
+    font-family: "HakkouMincho", serif;
+    font-size: 13px;
+    color: var(--ink);
+    opacity: 0.7;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+  <div class="marquee-bar top">
+    <div class="marquee-track to-left">
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+    </div>
+  </div>
+
+  <div class="marquee-bar bottom">
+    <div class="marquee-track to-right">
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+      <span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span><span>WASA42代</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="page-header">
+      <a href="index.html" class="back-link">← メニューに戻る</a>
+      <p class="page-title">その他</p>
+      <span class="header-spacer" aria-hidden="true"></span>
+    </div>
+    <h2 class="section-heading" style="margin-top: 24px;">1　無線</h2>
+    <div class="body-text">
+      生きている無線機はおそらく5つあります。<br>
+      無線機に関する引き継ぎはまた別であるのでtfが始まる頃に1個上の先輩に聞いてみてください。<br>
+      同じボックスの中に赤い風速計が4つあります。これらはTFで使用します。
+    </div>
+
+    <h2 class="section-heading">2　サーボが動かない！</h2>
+    <div class="troubleshoot" id="servo-troubleshoot"></div>
+
+    <h2 class="section-heading">3　最後に</h2>
+    <div class="body-text">
+      ここまで読んでくれてありがとう。まとまりがなくて読みにくくてごめんね～もし分からないところがあったら<br>
+      何でも気軽に聞いてください！TFの時とかかなり電装班は良い意味でも悪い意味でも存在感出てしまって<br>
+      疲れると思うけど頑張ってみてほしいです！応援しています♡　ばいばーい
+    </div>
+
+  </div>
+  <script>
+    const servoTree = {
+      start: {
+        message: "Serial managerでサーボは動きましたか？",
+        options: [
+          { label: "はい", next: "cable_check" },
+          { label: "いいえ", next: "servo_bad" }
+        ]
+      },
+      cable_check: {
+        message: "ケーブルの確認してください。",
+        options: [
+          { label: "正常", next: "ics_used" },
+          { label: "異常", next: "cable_bad" }
+        ]
+      },
+      cable_bad: {
+        message: "ケーブル変えてみて！",
+        options: [
+          { label: "交換した → 次へ", next: "cable_result" }
+        ]
+      },
+      cable_result: {
+        message: "サーボは動きましたか？",
+        options: [
+          { label: "動いた", next: "yatta" },
+          { label: "動かない", next: "ics_used" }
+        ]
+      },
+      servo_bad: {
+        message: "サーボ不良かも。サーボを変えてみて～",
+        options: []
+      },
+      ics_used: {
+        message: "ics変換基板を用いていますか？",
+        options: [
+          { label: "はい", next: "ics_check" },
+          { label: "いいえ", next: "shield_swap" }
+        ]
+      },
+      ics_check: {
+        message: "ics変換基板のショートやダイオードの損傷がないか確認して交換！",
+        options: [
+          { label: "確認・交換した → 次へ", next: "ics_result" }
+        ]
+      },
+      ics_result: {
+        message: "サーボは動きましたか？",
+        options: [
+          { label: "動いた", next: "yatta" },
+          { label: "動かない", next: "sample_code_check" }
+        ]
+      },
+      shield_swap: {
+        message: "シールド基板を変えてみましょう。",
+        options: [
+          { label: "交換した → 次へ", next: "shield_result" }
+        ]
+      },
+      shield_result: {
+        message: "サーボは動きましたか？",
+        options: [
+          { label: "動いた", next: "yatta" },
+          { label: "動かない", next: "sample_code_check" }
+        ]
+      },
+      yatta: {
+        message: "やったー",
+        options: []
+      },
+      sample_code_check: {
+        message: "サンプルコードで動作確認をしてみてください。",
+        options: [
+          { label: "動いた", next: "code_bad" },
+          { label: "動かない", next: "mcu_check" }
+        ]
+      },
+      code_bad: {
+        message: "操舵コード不良なのでコードを確認！",
+        options: []
+      },
+      mcu_check: {
+        message: "マイコン自体が正常か確認してみて～",
+        options: [
+          { label: "正常", next: "shield_bad" },
+          { label: "異常", next: "mcu_bad" }
+        ]
+      },
+      shield_bad: {
+        message: "困るねー、pythonで動かすべきかも。",
+        link: { url: "https://kondo-robot.com/faq/krs_tutorial_py1", label: "KRSサーボモータを動かそう(Python編)" },
+        options: []
+      },
+      mcu_bad: {
+        message: "マイコンを交換して！",
+        options: []
+      }
+    };
+
+    const troubleshootEl = document.getElementById("servo-troubleshoot");
+    let history = [];
+
+    function renderNode(nodeKey){
+      const node = servoTree[nodeKey];
+      troubleshootEl.innerHTML = "";
+
+      const isLeaf = node.options.length === 0;
+      const boxEl = document.createElement("div");
+      boxEl.className = "troubleshoot-box";
+
+      if (isLeaf) {
+        const answerEl = document.createElement("div");
+        answerEl.className = "troubleshoot-answer";
+        answerEl.innerHTML = node.message;
+        boxEl.appendChild(answerEl);
+
+        if (node.link) {
+          const linkEl = document.createElement("a");
+          linkEl.className = "troubleshoot-link";
+          linkEl.href = node.link.url;
+          linkEl.target = "_blank";
+          linkEl.rel = "noopener";
+          linkEl.textContent = node.link.label;
+          boxEl.appendChild(linkEl);
+        }
+
+        const restartBtn = document.createElement("button");
+        restartBtn.className = "troubleshoot-btn";
+        restartBtn.textContent = "はじめから";
+        restartBtn.addEventListener("click", () => {
+          history = [];
+          renderNode("start");
+        });
+        boxEl.appendChild(restartBtn);
+        troubleshootEl.appendChild(boxEl);
+        return;
+      }
+
+      const questionEl = document.createElement("div");
+      questionEl.className = "troubleshoot-question";
+      questionEl.innerHTML = node.message;
+      boxEl.appendChild(questionEl);
+
+      const optionsEl = document.createElement("div");
+      optionsEl.className = "troubleshoot-options";
+      node.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "troubleshoot-btn";
+        btn.textContent = opt.label;
+        btn.addEventListener("click", () => {
+          history.push(opt.label);
+          renderNode(opt.next);
+        });
+        optionsEl.appendChild(btn);
+      });
+      boxEl.appendChild(optionsEl);
+      troubleshootEl.appendChild(boxEl);
+    }
+
+    renderNode("start");
+  </script>
+
+</body>
+</html>
